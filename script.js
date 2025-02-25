@@ -7,16 +7,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function init() {
         tiles = [...Array(gridSize * gridSize - 1).keys()].map(n => n + 1).concat(null);
+
         shuffleTiles();
         render();
     }
 
     function shuffleTiles() {
-        for (let i = tiles.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+        const directions = [-1, 1, -gridSize, gridSize]; // 左, 右, 上, 下
+        for (let i = 0; i < 100; i++) { // 100回ランダム移動
+            let possibleMoves = directions.map(d => emptyIndex + d)
+                .filter(newIndex => isValidMove(emptyIndex, newIndex));
+
+            let randomMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+            [tiles[emptyIndex], tiles[randomMove]] = [tiles[randomMove], tiles[emptyIndex]];
+            emptyIndex = randomMove;
         }
     }
+
+    function isValidMove(from, to) {
+        if (to < 0 || to >= gridSize * gridSize) return false; // 範囲外
+        const fromRow = Math.floor(from / gridSize);
+        const toRow = Math.floor(to / gridSize);
+        return (Math.abs(from - to) === 1 && fromRow === toRow) || // 左右移動
+               (Math.abs(from - to) === gridSize); // 上下移動
+    }
+
 
     function render() {
         container.style.display = "grid";
