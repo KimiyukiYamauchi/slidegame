@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("puzzle-container");
     const resetButton = document.getElementById("reset");
-    const gridSize = 4;
+    const gridSize = 4; // パズルのサイズ (4x4)
     let tiles = [];
     let emptyIndex = gridSize * gridSize - 1; // 空白の位置 (最初は右下)
 
@@ -32,6 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
                (Math.abs(from - to) === gridSize); // 上下移動
     }
 
+    function getColor(num) {
+        if (num >= 1 && num <= 4) return "#FFDDC1"; // パステルレッド
+        if (num >= 5 && num <= 8) return "#C1E1FF"; // パステルブルー
+        if (num >= 9 && num <= 12) return "#C1FFC1"; // パステルグリーン
+        if (num >= 13 && num <= 15) return "#FFFFC1"; // パステルイエロー
+        return "white"; // 空白セルの色
+    }
+
 
     function render() {
         container.style.display = "grid";
@@ -46,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 emptyIndex = index;
             } else {
                 tile.textContent = num;
+                tile.style.backgroundColor = getColor(num);
                 tile.addEventListener("click", () => moveTile(index));
             }
             container.appendChild(tile);
