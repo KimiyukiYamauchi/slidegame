@@ -44,12 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function shuffleTiles() {
     const directions = [-1, 1, -gridSize, gridSize]; // 左, 右, 上, 下
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
       // 100回ランダム移動
       let possibleMoves = directions
         .map((d) => emptyIndex + d)
         .filter((newIndex) => isValidMove(emptyIndex, newIndex));
-
+      if (possibleMoves.length === 0) continue;
       let randomMove =
         possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
       [tiles[emptyIndex], tiles[randomMove]] = [
