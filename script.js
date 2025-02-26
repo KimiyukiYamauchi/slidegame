@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
   moveCounter.id = "move-counter";
   moveCounter.textContent = "移動回数: 0";
   document.body.insertBefore(moveCounter, container);
+  
+  const bestMoveCounter = document.createElement("span");
+  bestMoveCounter.id = "best-move-counter";
+  bestMoveCounter.textContent = " (ベスト: -)";
+  moveCounter.appendChild(bestMoveCounter);
 
   const difficultySelector = document.createElement("div");
   difficultySelector.innerHTML = `
@@ -19,17 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
   let tiles = [];
   let emptyIndex = gridSize * gridSize - 1; // 空白の位置 (最初は右下)
   let moveCount = 0;
+  let difficulty = "medium";
 
-  function setDifficulty(size) {
+  function setDifficulty(size, diff) {
     gridSize = size;
+    difficulty = diff;
     container.style.width = `${size * 100}px`;
     container.style.height = `${size * 100}px`;
     init();
   }
 
-  document.getElementById("easy").addEventListener("click", () => setDifficulty(3));
-  document.getElementById("medium").addEventListener("click", () => setDifficulty(4));
-  document.getElementById("hard").addEventListener("click", () => setDifficulty(5));
+  document.getElementById("easy").addEventListener("click", () => setDifficulty(3, "easy"));
+  document.getElementById("medium").addEventListener("click", () => setDifficulty(4, "medium"));
+  document.getElementById("hard").addEventListener("click", () => setDifficulty(5, "hard"));
 
   function init() {
     tiles = [...Array(gridSize * gridSize - 1).keys()]
@@ -38,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     emptyIndex = gridSize * gridSize - 1;
     moveCount = 0;
     updateMoveCounter();
+    // updateBestMoveCounter();
     shuffleTiles();
     render();
   }
@@ -131,16 +139,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateMoveCounter() {
-    moveCounter.textContent = `移動回数: ${moveCount}`;
-}
+    const bestMovesText = updateBestMoveCounter();
+    moveCounter.textContent = `移動回数: ${moveCount} ${bestMovesText}`;
+  }
+
+  function updateBestMoveCounter() {
+    const bestMoves = localStorage.getItem(`best-moves-${difficulty}`);
+    return bestMoves ? `(ベスト: ${bestMoves})` : "(ベスト: -)";
+  }
 
   function checkWin() {
     if (
       tiles.slice(0, gridSize * gridSize - 1).every((num, i) => num === i + 1)
     ) {
       alert("クリアしました！");
+      saveBestMoveCount();
     }
   }
+
+  function saveBestMoveCount() {
+    const bestMoves = localStorage.getItem(`best-moves-${difficulty}`);
+    if (!bestMoves || moveCount < parseInt(bestMoves)) {
+        localStorage.setItem(`best-moves-${difficulty}`, moveCount);
+        updateBestMoveCounter();
+    }
+}
+
 
   resetButton.addEventListener("click", init);
 
