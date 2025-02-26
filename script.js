@@ -1,9 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("puzzle-container");
   const resetButton = document.getElementById("reset");
+  const moveCounter = document.createElement("p");
+  moveCounter.id = "move-counter";
+  moveCounter.textContent = "移動回数: 0";
+  document.body.insertBefore(moveCounter, container);
+
   const gridSize = 4; // パズルのサイズ (4x4)
   let tiles = [];
   let emptyIndex = gridSize * gridSize - 1; // 空白の位置 (最初は右下)
+  let moveCount = 0;
 
   function init() {
     tiles = [...Array(gridSize * gridSize - 1).keys()]
@@ -82,10 +88,16 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       [tiles[emptyIndex], tiles[index]] = [tiles[index], tiles[emptyIndex]];
       emptyIndex = index;
+      moveCount++;
+      updateMoveCounter();
       render();
       checkWin();
     }
   }
+
+  function updateMoveCounter() {
+    moveCounter.textContent = `移動回数: ${moveCount}`;
+}
 
   function checkWin() {
     if (
