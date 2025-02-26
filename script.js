@@ -6,16 +6,38 @@ document.addEventListener("DOMContentLoaded", () => {
   moveCounter.textContent = "移動回数: 0";
   document.body.insertBefore(moveCounter, container);
 
-  const gridSize = 4; // パズルのサイズ (4x4)
+  const difficultySelector = document.createElement("div");
+  difficultySelector.innerHTML = `
+      <label>難易度選択: </label>
+      <button id="easy">初級</button>
+      <button id="medium">中級</button>
+      <button id="hard">上級</button>
+  `;
+  document.body.insertBefore(difficultySelector, container);
+
+  let gridSize = 4; // パズルのサイズ (4x4)
   let tiles = [];
   let emptyIndex = gridSize * gridSize - 1; // 空白の位置 (最初は右下)
   let moveCount = 0;
+
+  function setDifficulty(size) {
+    gridSize = size;
+    container.style.width = `${size * 100}px`;
+    container.style.height = `${size * 100}px`;
+    init();
+  }
+
+  document.getElementById("easy").addEventListener("click", () => setDifficulty(3));
+  document.getElementById("medium").addEventListener("click", () => setDifficulty(4));
+  document.getElementById("hard").addEventListener("click", () => setDifficulty(5));
 
   function init() {
     tiles = [...Array(gridSize * gridSize - 1).keys()]
       .map((n) => n + 1)
       .concat(null);
-
+    emptyIndex = gridSize * gridSize - 1;
+    moveCount = 0;
+    updateMoveCounter();
     shuffleTiles();
     render();
   }
@@ -49,12 +71,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getColor(num) {
-    if (num >= 1 && num <= 4) return "#FFDDC1"; // パステルレッド
-    if (num >= 5 && num <= 8) return "#C1E1FF"; // パステルブルー
-    if (num >= 9 && num <= 12) return "#C1FFC1"; // パステルグリーン
-    if (num >= 13 && num <= 15) return "#FFFFC1"; // パステルイエロー
-    return "white"; // 空白セルの色
-  }
+    if (gridSize === 3) {
+        if (num >= 1 && num <= 3) return "#FFDDC1"; // パステルレッド
+        if (num >= 4 && num <= 6) return "#C1E1FF"; // パステルブルー
+        if (num >= 7 && num <= 9) return "#C1FFC1"; // パステルグリーン
+    } else if (gridSize === 4) {
+        if (num >= 1 && num <= 4) return "#FFDDC1"; // パステルレッド
+        if (num >= 5 && num <= 8) return "#C1E1FF"; // パステルブルー
+        if (num >= 9 && num <= 12) return "#C1FFC1"; // パステルグリーン
+        if (num >= 13 && num <= 15) return "#FFFFC1"; // パステルイエロー
+    } else if (gridSize === 5) {
+        if (num >= 1 && num <= 5) return "#FFDDC1"; // パステルレッド
+        if (num >= 6 && num <= 10) return "#C1E1FF"; // パステルブルー
+        if (num >= 11 && num <= 15) return "#C1FFC1"; // パステルグリーン
+        if (num >= 16 && num <= 20) return "#FFFFC1"; // パステルイエロー
+        if (num >= 21 && num <= 25) return "#E1C1FF"; // パステルパープル
+    }
+    return "white";
+}
+
 
   function render() {
     container.style.display = "grid";
