@@ -7,9 +7,23 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>スライドパズル</h1>
-    <div id="puzzle-container"></div>
-    <button id="reset">リセット</button>
+    <div id="container">
+        <h1>スライドパズル</h1>
+        
+        <p id="move-counter">移動回数: 0 <span id="best-move-counter">(ベスト: -)</span></p>
+
+        <div id="difficulty-selector">
+            <label>難易度選択: </label>
+            <button id="easy">初級</button>
+            <button id="medium">中級</button>
+            <button id="hard">上級</button>
+        </div>
+
+        <div id="puzzle-container"></div>
+
+        <button id="reset">リセット</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
