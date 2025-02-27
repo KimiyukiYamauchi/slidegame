@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("puzzle-container");
+  // container.style.border = "4px solid black";
+  container.style.padding = "5px";
+  container.style.boxSizing = "border-box";
+  container.style.display = "grid";
+  container.style.aspectRatio = "1 / 1";
+
   const resetButton = document.getElementById("reset");
   const moveCounter = document.createElement("p");
   moveCounter.id = "move-counter";
@@ -45,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
     emptyIndex = gridSize * gridSize - 1;
     moveCount = 0;
     updateMoveCounter();
-    // updateBestMoveCounter();
     shuffleTiles();
     render();
   }
@@ -100,19 +105,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function render() {
-    container.style.display = "grid";
-    container.style.gridTemplateColumns = `repeat(${gridSize}, 100px)`;
-    container.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
     container.innerHTML = "";
+    container.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
+
     tiles.forEach((num, index) => {
       const tile = document.createElement("div");
       tile.className = "tile";
+      tile.style.display = "flex";
+      tile.style.alignItems = "center";
+      tile.style.justifyContent = "center";
+      tile.style.boxSizing = "border-box";
+      tile.style.aspectRatio = "1 / 1";
+      tile.style.borderRadius = "3px";
+
       if (num === null) {
         tile.classList.add("empty");
         emptyIndex = index;
+        tile.style.backgroundColor = "white";
       } else {
         tile.textContent = num;
         tile.style.backgroundColor = getColor(num);
+        tile.style.border = "1px solid #999";
         tile.addEventListener("click", () => moveTile(index));
       }
       container.appendChild(tile);
