@@ -24,8 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function setDifficulty(size, diff) {
     gridSize = size;
     difficulty = diff;
-    container.style.width = `${size * 100}px`;
-    container.style.height = `${size * 100}px`;
     init();
   }
 

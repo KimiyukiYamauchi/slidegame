@@ -23,6 +23,7 @@ body {
 /* パズルの配置 */
 #puzzle-container {
     display: grid;
+    gap: 5px;
     padding: 5px;
     box-sizing: border-box;
     margin: 20px 0;
@@ -31,7 +32,6 @@ body {
 .tile {
     width: 100px;
     height: 100px;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,7 +39,8 @@ body {
     font-weight: bold;
     text-align: center;
     background-color: lightblue;
-    border-radius: 5px;
+    border: 1px solid #999;
+    border-radius: 3px;
     cursor: pointer;
 }
 .empty {
